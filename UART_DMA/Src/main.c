@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+char txData[30] = "Hi, This is Chihab\n";
+char rxData[30];
 
 /* USER CODE END PV */
 
@@ -89,7 +91,8 @@ int main(void)
   MX_DMA_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
+	
+	HAL_UART_Receive_DMA(&huart1, (uint8_t* ) rxData, 10);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -99,6 +102,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//		HAL_UART_Transmit(&huart1, (uint8_t *)txData, strlen(txData), 10);
+//		HAL_Delay(500);
   }
   /* USER CODE END 3 */
 }
@@ -158,7 +163,16 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(huart);
+  /* NOTE: This function should not be modified, when the callback is needed,
+           the HAL_UART_RxCpltCallback could be implemented in the user file
+   */
+		HAL_UART_Transmit(&huart1, (uint8_t *)rxData, strlen(rxData), 10);
 
+}
 /* USER CODE END 4 */
 
 /**
